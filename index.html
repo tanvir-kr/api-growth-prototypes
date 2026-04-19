@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claude Code CTA — Docs Prototype</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+html,body,#root{margin:0;height:100%;overflow:hidden}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer}
+.tweaks-panel{position:fixed;bottom:16px;right:16px;width:300px;background:#1e1e1c;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;z-index:200;font-family:var(--font-sans);box-shadow:0 12px 40px rgba(0,0,0,0.5);display:flex;flex-direction:column;gap:12px}
+.tweaks-panel h3{margin:0;font-size:13px;font-weight:600;color:rgba(255,255,255,0.9)}
+.tweaks-panel label{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.6);cursor:pointer;padding:6px 8px;border-radius:7px}
+.tweaks-panel label:hover{background:rgba(255,255,255,0.04)}
+.tweaks-panel label.active{background:rgba(217,119,87,0.08);color:#D97757}
+.tweaks-panel input[type=radio]{accent-color:#D97757}
+.tweaks-panel .divider{height:1px;background:rgba(255,255,255,0.06);margin:2px 0}
+.tweaks-panel .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:4px 8px;font-size:12px;color:rgba(255,255,255,0.6)}
+.tweaks-panel .toggle{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.1);border:none;position:relative;cursor:pointer;transition:background 150ms}
+.tweaks-panel .toggle.on{background:#D97757}
+.tweaks-panel .toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 150ms}
+.tweaks-panel .toggle.on::after{transform:translateX(16px)}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" data-presets="react" src="idea2_onboarding.jsx"></script>
+<script type="text/babel" data-presets="react" src="idea3_migration.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <rect width="100" height="100" fill="#1a1a18"/>
+  <g transform="translate(30,35)" fill="none" stroke="#D97757" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="2 22 14 10 2 -2"/>
+    <line x1="20" y1="26" x2="40" y2="26"/>
+  </g>
+</svg>
+</template>
+<script type="text/babel" data-presets="react">
+const {useState, useEffect, useRef} = React;
+
+/* ============ ICONS ============ */
+const AnthropicSymbol = ({size=20,color='currentColor'}) => <svg viewBox="0 0 108 76" width={size} height={size*76/108} fill={color}><path d="M77.896 0L61.38 0 91.484 76.139 108 76.139zM30.104 0L0 76.139 16.868 76.139 23.076 60.208 54.586 60.208 60.677 76.139 77.544 76.139 47.44 0zM28.464 46.035L38.772 19.328 49.08 46.035z"/></svg>;
+const TerminalIcon = ({size=16}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>;
+const CopyIcon = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>;
+const CheckIcon = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const ChevronDown = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>;
+const ClipboardIcon = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>;
+const SearchIcon = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+const MonitorIcon = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>;
+
+/* ============ COPY HOOK ============ */
+function useCopyState(){
+  const [copied,setCopied]=useState(false);
+  const copy=(text)=>{navigator.clipboard.writeText(text).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);};
+  return [copied,copy];
+}
+
+const PROMPT=`I want to build on the Claude API. Use the following resources:
+
+1. Full API documentation: https://platform.claude.com/llms-full.txt
+2. Current page context: https://platform.claude.com/docs/en/intro-to-claude.md
+3. Use the Claude API skill for best practices
+
+Help me implement this step by step.`;
+
+/* ============ CTA VARIATIONS ============ */
+
+function CTAInlineBanner(){
+  const [copied,copy]=useCopyState();
+  const [expanded,setExpanded]=useState(false);
+  return <div style={{background:'rgba(32,127,222,0.06)',border:'1px solid rgba(32,127,222,0.15)',borderRadius:10,padding:'10px 14px',display:'flex',flexDirection:'column',gap:expanded?10:0}}>
+    <div style={{display:'flex',alignItems:'center',gap:10}}>
+      <TerminalIcon size={15}/>
+      <span style={{fontSize:13,color:'rgba(255,255,255,0.8)',flex:1}}>Build with this page in Claude Code</span>
+      <button onClick={()=>setExpanded(!expanded)} style={{background:'transparent',border:'none',color:'rgba(255,255,255,0.4)',cursor:'pointer',fontSize:12,padding:'2px 6px',borderRadius:4,fontFamily:'var(--font-sans)'}}>{expanded?'Hide':'Preview'}</button>
+      <button onClick={()=>copy(PROMPT)} style={{background:copied?'rgba(76,175,80,0.15)':'rgba(32,127,222,0.12)',border:'1px solid '+(copied?'rgba(76,175,80,0.3)':'rgba(32,127,222,0.2)'),color:copied?'#81C784':'#61AAF2',padding:'5px 12px',borderRadius:6,fontSize:12,fontWeight:500,cursor:'pointer',display:'flex',alignItems:'center',gap:5,fontFamily:'var(--font-sans)',transition:'all 150ms',minWidth:120,justifyContent:'center'}}>{copied?<><CheckIcon size={12}/> Copied!</>:<><ClipboardIcon size={12}/> Copy prompt</>}</button>
+    </div>
+    {expanded&&<div style={{background:'rgba(0,0,0,0.3)',borderRadius:6,padding:'10px 12px',fontFamily:'var(--font-mono)',fontSize:12,lineHeight:1.5,color:'rgba(255,255,255,0.6)',whiteSpace:'pre-wrap'}}>{PROMPT}</div>}
+  </div>;
+}
+
+function CTAHeaderButton(){
+  const [copied,copy]=useCopyState();
+  return <button onClick={()=>copy(PROMPT)} style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:8,background:copied?'rgba(76,175,80,0.1)':'transparent',border:'1px solid '+(copied?'rgba(76,175,80,0.3)':'#373632'),color:copied?'#81C784':'rgba(255,255,255,0.7)',fontSize:12,fontWeight:500,cursor:'pointer',fontFamily:'var(--font-sans)',transition:'all 150ms'}}>{copied?<CheckIcon size={13}/>:<TerminalIcon size={13}/>}{copied?'Copied prompt':'Open in Claude Code'}</button>;
+}
+
+function CTAFloatingBar(){
+  const [copied,copy]=useCopyState();
+  const [dismissed,setDismissed]=useState(false);
+  if(dismissed)return null;
+  return <div style={{position:'fixed',bottom:20,left:'50%',transform:'translateX(-50%)',background:'#262625',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,padding:'10px 10px 10px 16px',display:'flex',alignItems:'center',gap:12,boxShadow:'0 8px 32px rgba(0,0,0,0.5)',zIndex:100,fontFamily:'var(--font-sans)',whiteSpace:'nowrap'}}>
+    <div style={{display:'flex',alignItems:'center',gap:8}}>
+      <div style={{width:28,height:28,borderRadius:7,background:'rgba(217,119,87,0.12)',display:'grid',placeItems:'center',color:'#D97757'}}><TerminalIcon size={14}/></div>
+      <span style={{fontSize:13,color:'rgba(255,255,255,0.85)'}}>Continue building this in Claude Code</span>
+    </div>
+    <button onClick={()=>copy(PROMPT)} style={{background:copied?'rgba(76,175,80,0.15)':'#D97757',border:'none',color:copied?'#81C784':'#fff',padding:'7px 16px',borderRadius:8,fontSize:12,fontWeight:500,cursor:'pointer',display:'flex',alignItems:'center',gap:5,fontFamily:'var(--font-sans)',transition:'all 150ms'}}>{copied?<><CheckIcon size={12}/> Copied!</>:<><ClipboardIcon size={12}/> Copy prompt</>}</button>
+    <button onClick={()=>setDismissed(true)} style={{background:'transparent',border:'none',color:'rgba(255,255,255,0.3)',cursor:'pointer',fontSize:16,padding:'0 4px',lineHeight:1}}>×</button>
+  </div>;
+}
+
+function CTASidebarCard(){
+  const [copied,copy]=useCopyState();
+  return <div style={{background:'rgba(217,119,87,0.06)',border:'1px solid rgba(217,119,87,0.12)',borderRadius:10,padding:14,display:'flex',flexDirection:'column',gap:10,marginTop:20}}>
+    <div style={{display:'flex',alignItems:'center',gap:8}}>
+      <div style={{width:24,height:24,borderRadius:6,background:'rgba(217,119,87,0.12)',display:'grid',placeItems:'center',color:'#D97757',flexShrink:0}}><TerminalIcon size={12}/></div>
+      <span style={{fontSize:12,fontWeight:500,color:'rgba(255,255,255,0.8)'}}>Build with Claude Code</span>
+    </div>
+    <p style={{fontSize:12,color:'rgba(255,255,255,0.45)',margin:0,lineHeight:1.45}}>Copy a prompt with this page's context to start building in Claude Code.</p>
+    <button onClick={()=>copy(PROMPT)} style={{width:'100%',background:copied?'rgba(76,175,80,0.1)':'rgba(217,119,87,0.1)',border:'1px solid '+(copied?'rgba(76,175,80,0.2)':'rgba(217,119,87,0.15)'),color:copied?'#81C784':'#D97757',padding:'7px 0',borderRadius:7,fontSize:12,fontWeight:500,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:5,fontFamily:'var(--font-sans)',transition:'all 150ms'}}>{copied?<><CheckIcon size={12}/> Prompt copied!</>:<><ClipboardIcon size={12}/> Copy prompt</>}</button>
+  </div>;
+}
+
+function CTAHomepageHero(){
+  const [copied,copy]=useCopyState();
+  const [show,setShow]=useState(false);
+  return <div style={{background:'#222220',border:'1px solid rgba(255,255,255,0.06)',borderRadius:14,padding:24,display:'flex',flexDirection:'column',gap:16}}>
+    <div style={{display:'flex',alignItems:'flex-start',gap:14}}>
+      <div style={{width:40,height:40,borderRadius:10,background:'rgba(217,119,87,0.1)',display:'grid',placeItems:'center',color:'#D97757',flexShrink:0}}><TerminalIcon size={20}/></div>
+      <div>
+        <div style={{fontSize:15,fontWeight:500,color:'#fff',marginBottom:4}}>Build with Claude Code</div>
+        <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',lineHeight:1.45}}>Start building on the API directly in your terminal. Copy a pre-loaded prompt with full API docs context.</div>
+      </div>
+    </div>
+    <div style={{background:'#191919',borderRadius:8,padding:'10px 14px',fontFamily:'var(--font-mono)',fontSize:12,lineHeight:1.6,color:'rgba(255,255,255,0.5)',border:'1px solid rgba(255,255,255,0.04)'}}>
+      <span style={{color:'#D97757'}}>$</span> <span style={{color:'rgba(255,255,255,0.7)'}}>claude</span> <span style={{color:'rgba(255,255,255,0.35)'}}>"I want to build on the Claude API. Use…"</span>
+    </div>
+    <div style={{display:'flex',gap:8}}>
+      <button onClick={()=>copy(PROMPT)} style={{flex:1,background:copied?'rgba(76,175,80,0.12)':'#D97757',border:'none',color:copied?'#81C784':'#fff',padding:'9px 0',borderRadius:8,fontSize:13,fontWeight:500,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6,fontFamily:'var(--font-sans)',transition:'all 150ms'}}>{copied?<><CheckIcon size={13}/> Prompt copied!</>:<><ClipboardIcon size={13}/> Copy prompt for Claude Code</>}</button>
+      <button onClick={()=>setShow(!show)} style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',color:'rgba(255,255,255,0.5)',padding:'9px 12px',borderRadius:8,fontSize:12,cursor:'pointer',fontFamily:'var(--font-sans)'}}>{show?'Hide':'Preview'}</button>
+    </div>
+    {show&&<div style={{background:'rgba(0,0,0,0.25)',borderRadius:8,padding:'12px 14px',fontFamily:'var(--font-mono)',fontSize:12,lineHeight:1.6,color:'rgba(255,255,255,0.55)',whiteSpace:'pre-wrap'}}>{PROMPT}</div>}
+  </div>;
+}
+
+function CTAInlineLink(){
+  const [copied,copy]=useCopyState();
+  return <button onClick={()=>copy(PROMPT)} style={{background:'transparent',border:'none',color:copied?'#81C784':'#61AAF2',fontSize:13,cursor:'pointer',display:'inline-flex',alignItems:'center',gap:5,fontFamily:'var(--font-sans)',padding:0,transition:'color 150ms'}}>{copied?<CheckIcon size={12}/>:<TerminalIcon size={13}/>}{copied?'Prompt copied':'Open in Claude Code'}</button>;
+}
+
+/* ============ SIDEBAR NAV DATA ============ */
+const sidebarSections=[
+  {label:'First steps',items:[{label:'Intro to Claude',active:true},{label:'Quickstart'}]},
+  {label:'Building with Claude',items:[{label:'Features overview'},{label:'Using the Messages API'},{label:'Claude API skill'},{label:'Handling stop reasons'}]},
+  {label:'Model capabilities',items:[{label:'Extended thinking'},{label:'Adaptive thinking'},{label:'Effort'},{label:'Task budgets (beta)'},{label:'Fast mode (beta: research previ…'},{label:'Structured outputs'},{label:'Citations'},{label:'Streaming Messages'},{label:'Batch processing'}]},
+];
+
+/* ============ MAIN APP ============ */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "variant": "A",
+  "showFloating": false,
+  "copyVariant": "A"
+}/*EDITMODE-END*/;
+
+function Idea1App(){
+  const [tweaks,setTweaks]=useState(TWEAK_DEFAULTS);
+  const [showTweaks,setShowTweaks]=useState(false);
+  const variant=tweaks.variant;
+
+  useEffect(()=>{
+    const h=(e)=>{
+      if(e.data?.type==='__activate_edit_mode')setShowTweaks(true);
+      if(e.data?.type==='__deactivate_edit_mode')setShowTweaks(false);
+    };
+    window.addEventListener('message',h);
+    window.parent.postMessage({type:'__edit_mode_available'},'*');
+    return ()=>window.removeEventListener('message',h);
+  },[]);
+
+  const setTweak=(k,v)=>{
+    const next={...tweaks,[k]:v};
+    setTweaks(next);
+    window.parent.postMessage({type:'__edit_mode_set_keys',edits:{[k]:v}},'*');
+  };
+
+  const navItems=['Build','Admin','Models & pricing','Client SDKs','API Reference'];
+
+  return <>
+    <div style={{display:'grid',gridTemplateColumns:'272px 1fr',gridTemplateRows:'52px 1fr',height:'100%',background:'#191919',fontFamily:'var(--font-sans)',color:'#fff',WebkitFontSmoothing:'antialiased'}}>
+      {/* TOPBAR */}
+      <header style={{gridColumn:'1/-1',display:'flex',alignItems:'center',padding:'0 20px',borderBottom:'1px solid rgba(255,255,255,0.06)',background:'#1e1e1c',gap:16,zIndex:10}}>
+        <div style={{display:'flex',alignItems:'center',gap:8,marginRight:4}}>
+          <AnthropicSymbol size={16} color="#D97757"/>
+          <span style={{fontSize:14,fontWeight:600,letterSpacing:'-0.2px'}}>Claude API Docs</span>
+        </div>
+        <button style={{display:'inline-flex',alignItems:'center',gap:5,padding:'3px 10px',borderRadius:6,background:'rgba(255,255,255,0.08)',color:'#fff',fontSize:12,fontWeight:500,border:'none',cursor:'pointer'}}>Messages <ChevronDown size={12}/></button>
+        <div style={{display:'flex',gap:0,marginLeft:'auto',alignItems:'center'}}>
+          {navItems.map((n,i)=><button key={n} style={{padding:'6px 14px',fontSize:13,color:i===0?'#fff':'rgba(255,255,255,0.6)',background:i===0?'rgba(255,255,255,0.08)':'transparent',border:'none',borderRadius:6,cursor:'pointer',fontFamily:'var(--font-sans)'}}>{n}</button>)}
+          <button style={{background:'transparent',border:'none',color:'rgba(255,255,255,0.5)',cursor:'pointer',padding:4,marginLeft:16}}><MonitorIcon size={16}/></button>
+          <button style={{padding:'6px 14px',fontSize:13,color:'rgba(255,255,255,0.6)',background:'transparent',border:'none',borderRadius:6,cursor:'pointer',fontFamily:'var(--font-sans)'}}>English <ChevronDown size={10}/></button>
+        </div>
+      </header>
+
+      {/* SIDEBAR */}
+      <aside style={{background:'#1a1a18',borderRight:'1px solid rgba(255,255,255,0.06)',overflowY:'auto',padding:'12px 0',display:'flex',flexDirection:'column',gap:2}}>
+        <div style={{display:'flex',alignItems:'center',gap:8,margin:'4px 12px 8px',padding:'7px 10px',borderRadius:8,background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',color:'rgba(255,255,255,0.4)',fontSize:13}}>
+          <SearchIcon size={14}/><span>Search…</span><span style={{marginLeft:'auto',fontSize:11,opacity:0.5}}>⌘K</span>
+        </div>
+        {sidebarSections.map(s=><div key={s.label}>
+          <div style={{fontSize:12,fontWeight:600,color:'rgba(255,255,255,0.9)',padding:'16px 16px 4px'}}>{s.label}</div>
+          {s.items.map(item=><button key={item.label} style={{display:'block',width:'100%',textAlign:'left',padding:'6px 16px',fontSize:13,color:item.active?'#fff':'rgba(255,255,255,0.55)',background:item.active?'rgba(255,255,255,0.06)':'transparent',border:'none',cursor:'pointer',fontFamily:'var(--font-sans)',lineHeight:1.4}}>{item.label}</button>)}
+        </div>)}
+        <div style={{marginTop:'auto',borderTop:'1px solid rgba(255,255,255,0.06)',padding:'12px 16px',display:'flex',flexDirection:'column',gap:6}}>
+          <button style={{display:'flex',alignItems:'center',gap:8,padding:'6px 0',fontSize:13,color:'rgba(255,255,255,0.55)',background:'transparent',border:'none',cursor:'pointer',fontFamily:'var(--font-sans)'}}><MonitorIcon size={14}/> Console</button>
+          <div style={{display:'flex',alignItems:'center',gap:8,fontSize:13,color:'rgba(255,255,255,0.6)',paddingTop:4}}>
+            <div style={{width:24,height:24,borderRadius:'50%',background:'#CC785C',display:'grid',placeItems:'center',fontFamily:'var(--font-serif)',fontSize:11}}>T</div>
+            <span>Tanvir</span><span style={{fontSize:11,opacity:0.4}}>· Tanvir's In…</span><ChevronDown size={12}/>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <div style={{overflowY:'auto',display:'flex',justifyContent:'center',padding:'32px 48px 120px',position:'relative'}}>
+        <div style={{width:'100%',maxWidth:720}}>
+          <div style={{fontSize:12,color:'rgba(255,255,255,0.4)',marginBottom:8}}>First steps</div>
+
+          {/* Page header */}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12,gap:12,flexWrap:'wrap'}}>
+            <h1 style={{fontFamily:'var(--font-serif)',fontSize:28,fontWeight:500,margin:0,letterSpacing:'-0.5px'}}>Intro to Claude</h1>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
+              {variant==='B'&&<CTAHeaderButton/>}
+              <button style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:8,background:'transparent',border:'1px solid #373632',color:'rgba(255,255,255,0.7)',fontSize:12,fontWeight:500,cursor:'pointer',fontFamily:'var(--font-sans)'}}><CopyIcon size={13}/> Copy page <ChevronDown size={10}/></button>
+            </div>
+          </div>
+
+          <p style={{fontSize:14,color:'rgba(255,255,255,0.65)',lineHeight:1.65,margin:'0 0 20px'}}>Claude is a highly performant, trustworthy, and intelligent AI platform built by Anthropic. Claude excels at tasks involving language, reasoning, analysis, coding, and more.</p>
+
+          {variant==='A'&&<div style={{marginBottom:20}}><CTAInlineBanner/></div>}
+          {variant==='F'&&<div style={{marginBottom:20}}><CTAInlineLink/></div>}
+
+          {/* Model callout */}
+          <div style={{background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:10,padding:'14px 16px',marginBottom:20,fontSize:13,lineHeight:1.6}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}><span style={{opacity:0.5}}>✦</span><span style={{color:'rgba(255,255,255,0.7)'}}>The latest generation of Claude models:</span></div>
+            {[['Claude Opus 4.7','Our most capable model for complex reasoning and agentic coding.'],['Claude Sonnet 4.6','Frontier intelligence at scale—built for coding, agents, and enterprise.'],['Claude Haiku 4.5','Fastest model with near-frontier intelligence.']].map(([n,d])=><div key={n} style={{padding:'3px 0 3px 26px',fontSize:13}}><span style={{fontWeight:600,color:'#fff'}}>{n}</span><span style={{color:'rgba(255,255,255,0.5)'}}> — {d} </span><span style={{color:'#61AAF2',cursor:'pointer',fontSize:12}}>Learn more.</span></div>)}
+          </div>
+
+          {/* Info callout */}
+          <div style={{background:'rgba(32,127,222,0.06)',border:'1px solid rgba(32,127,222,0.12)',borderRadius:8,padding:'10px 14px',marginBottom:24,display:'flex',alignItems:'center',gap:8,fontSize:13,color:'rgba(255,255,255,0.6)'}}>
+            <span style={{color:'#61AAF2'}}>ⓘ</span> Looking to chat with Claude? Visit <span style={{color:'#61AAF2',cursor:'pointer',marginLeft:4}}>claude.ai</span>.
+          </div>
+
+          <p style={{fontSize:14,color:'rgba(255,255,255,0.6)',lineHeight:1.6,margin:'0 0 16px'}}>Anthropic offers two ways to build with Claude, each suited to different use cases:</p>
+
+          {/* Table */}
+          <table style={{width:'100%',borderCollapse:'collapse',fontSize:13,marginBottom:32}}>
+            <thead><tr style={{borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+              <th style={{textAlign:'left',padding:'8px 12px',color:'rgba(255,255,255,0.4)',fontWeight:500,width:120}}></th>
+              <th style={{textAlign:'left',padding:'8px 12px',color:'#fff',fontWeight:600}}>Messages API</th>
+              <th style={{textAlign:'left',padding:'8px 12px',color:'#fff',fontWeight:600}}>Claude Managed Agents</th>
+            </tr></thead>
+            <tbody>
+              {[['What it is','Direct model prompting access','Pre-built, configurable agent harness'],['Best for','Custom agent loops and fine-grained control','Long-running tasks and async work'],['Learn more','Messages API docs','Managed Agents docs']].map(([l,a,b])=><tr key={l} style={{borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+                <td style={{padding:'10px 12px',color:'rgba(255,255,255,0.5)',fontWeight:500}}>{l}</td>
+                <td style={{padding:'10px 12px',color:l==='Learn more'?'#61AAF2':'rgba(255,255,255,0.65)'}}>{a}</td>
+                <td style={{padding:'10px 12px',color:l==='Learn more'?'#61AAF2':'rgba(255,255,255,0.65)'}}>{b}</td>
+              </tr>)}
+            </tbody>
+          </table>
+
+          {variant==='E'&&<div style={{marginBottom:32}}><CTAHomepageHero/></div>}
+
+          <h2 style={{fontFamily:'var(--font-serif)',fontSize:22,fontWeight:500,marginBottom:6,letterSpacing:'-0.3px'}}>Recommended path for new developers</h2>
+          <p style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:20,lineHeight:1.5}}>Follow these steps to go from zero to a working Claude integration.</p>
+          {['Make your first API call','Explore model capabilities','Build your integration'].map((s,i)=><div key={s} style={{display:'flex',alignItems:'center',gap:14,padding:'14px 0',borderTop:i===0?'1px solid rgba(255,255,255,0.06)':'none',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+            <div style={{width:28,height:28,borderRadius:'50%',border:'1px solid rgba(255,255,255,0.15)',display:'grid',placeItems:'center',fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.6)',flexShrink:0}}>{i+1}</div>
+            <span style={{fontSize:14,fontWeight:500}}>{s}</span>
+          </div>)}
+        </div>
+
+        {/* Right sidebar / TOC */}
+        <div style={{width:220,flexShrink:0,marginLeft:48,paddingTop:8}}>
+          <div style={{borderLeft:'2px solid rgba(255,255,255,0.08)',paddingLeft:14}}>
+            <div style={{fontSize:12,fontWeight:600,color:'rgba(255,255,255,0.8)',marginBottom:10}}>Recommended path for new developers</div>
+            {['Develop with Claude','Key capabilities','Support'].map(t=><div key={t} style={{fontSize:12,color:'rgba(255,255,255,0.4)',padding:'4px 0',cursor:'pointer'}}>{t}</div>)}
+          </div>
+          {variant==='D'&&<CTASidebarCard/>}
+        </div>
+      </div>
+    </div>
+
+    {/* Floating bar */}
+    {(variant==='C'||tweaks.showFloating)&&<CTAFloatingBar/>}
+
+    {/* Ask Docs */}
+    <div style={{position:'fixed',bottom:20,right:20,background:'#262625',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,padding:'8px 14px',display:'flex',alignItems:'center',gap:8,fontSize:13,color:'rgba(255,255,255,0.7)',boxShadow:'0 4px 16px rgba(0,0,0,0.4)',zIndex:50,cursor:'pointer'}}>Ask Docs <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+
+    {/* Tweaks */}
+    {showTweaks&&<div className="tweaks-panel">
+      <h3>Tweaks</h3>
+      <div className="divider"/>
+      <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',fontWeight:500,textTransform:'uppercase',letterSpacing:'0.05em',padding:'0 8px'}}>CTA Placement</div>
+      {[['A','Inline banner (below intro)'],['B','Header button (next to Copy page)'],['C','Floating bar (bottom of page)'],['D','Sidebar card (TOC area)'],['E','Homepage hero card'],['F','Inline text link (minimal)']].map(([v,label])=>
+        <label key={v} className={variant===v?'active':''}>
+          <input type="radio" name="variant" checked={variant===v} onChange={()=>setTweak('variant',v)}/><span><strong>{v}.</strong> {label}</span>
+        </label>
+      )}
+      <div className="divider"/>
+      <div className="toggle-row"><span>Also show floating bar</span><button className={'toggle'+(tweaks.showFloating?' on':'')} onClick={()=>setTweak('showFloating',!tweaks.showFloating)}/></div>
+    </div>}
+  </>;
+}
+
+/* ============ ROOT TAB SHELL ============ */
+function Placeholder({title}){
+  return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%',background:'#191919',color:'rgba(255,255,255,0.5)',fontFamily:'var(--font-sans)',fontSize:16}}>
+    <div style={{textAlign:'center'}}>
+      <div style={{fontSize:22,color:'#fff',marginBottom:8,fontFamily:'var(--font-serif)'}}>{title}</div>
+      <div>Coming next — share the idea and we'll build it here.</div>
+    </div>
+  </div>;
+}
+
+function RootApp(){
+  const [tab,setTab]=useState(()=>localStorage.getItem('proto_tab')||'idea1');
+  useEffect(()=>{localStorage.setItem('proto_tab',tab);},[tab]);
+  // Idea 2 + Idea 3 tweaks state + edit mode wiring
+  const [idea2Tweaks,setIdea2Tweaks]=useState(window.IDEA2_TWEAK_DEFAULTS||{oauthEnabled:true,prStretch:true,copyVariant:'A'});
+  const [idea3Tweaks,setIdea3Tweaks]=useState(window.IDEA3_TWEAK_DEFAULTS||{showRecs:true,showCredit:true,creditAmount:20});
+  const [showTweaks,setShowTweaks]=useState(false);
+  useEffect(()=>{
+    const h=e=>{
+      if(e.data?.type==='__activate_edit_mode')setShowTweaks(true);
+      if(e.data?.type==='__deactivate_edit_mode')setShowTweaks(false);
+    };
+    window.addEventListener('message',h);
+    window.parent.postMessage({type:'__edit_mode_available'},'*');
+    return()=>window.removeEventListener('message',h);
+  },[]);
+  const setIdea2Tweak=(k,v)=>{
+    setIdea2Tweaks(t=>({...t,[k]:v}));
+    window.parent.postMessage({type:'__edit_mode_set_keys',edits:{[k]:v}},'*');
+  };
+  const setIdea3Tweak=(k,v)=>{
+    setIdea3Tweaks(t=>({...t,[k]:v}));
+    window.parent.postMessage({type:'__edit_mode_set_keys',edits:{[k]:v}},'*');
+  };
+  const tabs=[
+    {id:'idea1',label:'Idea 1 · Claude Code CTA'},
+    {id:'idea2',label:'Idea 2 · GitHub onboarding'},
+    {id:'idea3',label:'Idea 3 · OpenAI migration'},
+  ];
+  return <div style={{display:'flex',flexDirection:'column',height:'100vh',background:'#0e0e0d'}}>
+    <nav style={{display:'flex',alignItems:'center',gap:4,padding:'8px 16px',background:'#0e0e0d',borderBottom:'1px solid rgba(255,255,255,0.06)',fontFamily:'var(--font-sans)',flexShrink:0}}>
+      <span style={{fontSize:12,color:'rgba(255,255,255,0.4)',marginRight:12,letterSpacing:'0.05em',textTransform:'uppercase',fontWeight:500}}>Prototypes</span>
+      {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{padding:'6px 14px',fontSize:13,fontWeight:500,color:tab===t.id?'#fff':'rgba(255,255,255,0.5)',background:tab===t.id?'rgba(217,119,87,0.12)':'transparent',border:'1px solid '+(tab===t.id?'rgba(217,119,87,0.3)':'transparent'),borderRadius:8,cursor:'pointer',fontFamily:'var(--font-sans)'}}>{t.label}</button>)}
+    </nav>
+    <div style={{flex:1,overflow:'hidden',position:'relative'}}>
+      {tab==='idea1'&&<Idea1App/>}
+      {tab==='idea2'&&window.Idea2App&&<window.Idea2App tweaks={idea2Tweaks} setTweak={setIdea2Tweak} showTweaks={showTweaks}/>}
+      {tab==='idea3'&&(window.Idea3App?<window.Idea3App tweaks={idea3Tweaks} setTweak={setIdea3Tweak} showTweaks={showTweaks}/>:<Placeholder title="Idea 3"/>)}
+    </div>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<RootApp/>);
+</script>
+</body>
+</html>
