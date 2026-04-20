@@ -11,9 +11,6 @@ const {useState: useState2, useEffect: useEffect2, useRef: useRef2} = React;
 const GitHubMark = ({size=18, color='currentColor'}) => (
   <svg width={size} height={size} viewBox="0 0 16 16" fill={color}><path fillRule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
 );
-const GoogleMark = ({size=18}) => (
-  <svg width={size} height={size} viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-);
 const ChevronRight2 = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
 const ArrowRight2 = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
 const CheckCircle2 = ({size=16,color='#4ade80'}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
@@ -32,7 +29,6 @@ const KeyIcon2 = ({size=15}) => <svg width={size} height={size} viewBox="0 0 24 
 const UsageIcon2 = ({size=15}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>;
 const BookIcon2 = ({size=15}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>;
 const CreditIcon2 = ({size=15}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
-const MailIcon2 = ({size=14}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>;
 const SpinnerIcon2 = ({size=16}) => <svg width={size} height={size} viewBox="0 0 24 24" style={{animation:'idea2spin 0.8s linear infinite'}}><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.15)" strokeWidth="2.5" fill="none"/><path d="M12 3a9 9 0 019 9" stroke="#D97757" strokeWidth="2.5" strokeLinecap="round" fill="none"/></svg>;
 
 /* ---------- CTA copy variants ---------- */
@@ -71,50 +67,7 @@ const FAKE_REPOS = [
   {name:'ml-notebooks', owner:'tanvir-k', desc:'Jupyter notebooks for model evals', lang:'Jupyter Notebook', langColor:'#DA5B0B', stars:1, updated:'3 months ago', visibility:'Private'},
 ];
 
-/* ---------- STEP 1: Sign in ---------- */
-function Idea2SignIn({oauthEnabled, copyVariant, onContinue}){
-  return (
-    <div style={{height:'100%',background:'radial-gradient(ellipse at 50% 0%, rgba(217,119,87,0.06), transparent 55%), #191919',overflow:'auto'}}>
-      <div style={{minHeight:'100%',display:'flex',alignItems:'center',justifyContent:'center',padding:'40px 24px'}}>
-        <div style={{width:'100%',maxWidth:400}}>
-          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:56}}>
-            <AnthropicSymbol size={22} color="#D97757"/>
-            <span style={{fontSize:16,fontWeight:600,color:'#fff',letterSpacing:'-0.2px'}}>Claude Platform</span>
-          </div>
-
-          <h1 style={{fontFamily:'var(--font-serif)',fontSize:36,fontWeight:400,letterSpacing:'-0.8px',color:'#fff',margin:'0 0 10px',lineHeight:1.1}}>Sign in</h1>
-          <p style={{fontSize:14,color:'rgba(255,255,255,0.55)',margin:'0 0 28px',lineHeight:1.5}}>Build, test, and deploy with the Claude API.</p>
-
-          <div style={{display:'flex',flexDirection:'column',gap:10}}>
-            <button style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,width:'100%',padding:'12px 16px',borderRadius:10,background:'#fff',color:'#191919',fontSize:14,fontWeight:500,border:'none',cursor:'pointer',fontFamily:'var(--font-sans)'}}>
-              <GoogleMark size={16}/> Continue with Google
-            </button>
-            {oauthEnabled && (
-              <button onClick={onContinue} style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,width:'100%',padding:'12px 16px',borderRadius:10,background:'#24292f',color:'#fff',fontSize:14,fontWeight:500,border:'none',cursor:'pointer',fontFamily:'var(--font-sans)',position:'relative'}}>
-                <GitHubMark size={16} color="#fff"/> Continue with GitHub
-                <span style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',fontSize:10,color:'#D97757',background:'rgba(217,119,87,0.15)',padding:'2px 6px',borderRadius:4,fontWeight:500,letterSpacing:'0.02em'}}>NEW</span>
-              </button>
-            )}
-            <div style={{display:'flex',alignItems:'center',gap:12,margin:'4px 0'}}>
-              <div style={{flex:1,height:1,background:'rgba(255,255,255,0.08)'}}/>
-              <span style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:'0.05em',textTransform:'uppercase'}}>or</span>
-              <div style={{flex:1,height:1,background:'rgba(255,255,255,0.08)'}}/>
-            </div>
-            <div style={{position:'relative'}}>
-              <span style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)',color:'rgba(255,255,255,0.4)',pointerEvents:'none',display:'flex',alignItems:'center'}}><MailIcon2 size={14}/></span>
-              <input placeholder="you@company.com" style={{width:'100%',padding:'12px 14px 12px 38px',borderRadius:10,background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.1)',color:'#fff',fontSize:14,fontFamily:'var(--font-sans)',outline:'none'}}/>
-            </div>
-            <button onClick={onContinue} style={{padding:'12px 16px',borderRadius:10,background:'rgba(255,255,255,0.08)',color:'#fff',fontSize:14,fontWeight:500,border:'1px solid rgba(255,255,255,0.12)',cursor:'pointer',fontFamily:'var(--font-sans)'}}>Continue with email</button>
-          </div>
-
-          <p style={{fontSize:11,color:'rgba(255,255,255,0.35)',marginTop:28,lineHeight:1.6,textAlign:'center'}}>By continuing, you agree to Anthropic’s <span style={{color:'rgba(255,255,255,0.55)',textDecoration:'underline'}}>Terms of Service</span> and <span style={{color:'rgba(255,255,255,0.55)',textDecoration:'underline'}}>Privacy Policy</span>.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ---------- STEP 2: Post-login CTA (replaces "Buy credits") ---------- */
+/* ---------- STEP 1: Post-login CTA (replaces "Buy credits") ---------- */
 function Idea2Welcome({copyVariant, onConnectGithub, onSkip}){
   const copy = CTA_COPY[copyVariant] || CTA_COPY.A;
   return (
@@ -527,7 +480,6 @@ function Idea2Dashboard({repo, prStretch, apiKey, onViewPR}){
 
 /* ---------- Main Idea 2 App w/ stepper ---------- */
 const IDEA2_TWEAK_DEFAULTS = /*IDEA2MODE-BEGIN*/{
-  "oauthEnabled": true,
   "prStretch": true,
   "copyVariant": "A"
 }/*IDEA2MODE-END*/;
@@ -535,7 +487,7 @@ const IDEA2_TWEAK_DEFAULTS = /*IDEA2MODE-BEGIN*/{
 function Idea2App({tweaks, setTweak, showTweaks}){
   const [step,setStep] = useState2(()=>{
     const s = localStorage.getItem('idea2_step');
-    return s || 'signin';
+    return (s && s!=='signin') ? s : 'welcome';
   });
   const [repo,setRepo] = useState2(null);
   useEffect2(()=>{localStorage.setItem('idea2_step',step);},[step]);
@@ -546,7 +498,6 @@ function Idea2App({tweaks, setTweak, showTweaks}){
     <div style={{height:'100%',position:'relative'}}>
       <style>{`@keyframes idea2spin{to{transform:rotate(360deg)}}`}</style>
 
-      {step==='signin' && <Idea2SignIn oauthEnabled={tweaks.oauthEnabled} copyVariant={tweaks.copyVariant} onContinue={()=>setStep(tweaks.oauthEnabled?'ghauth':'welcome')}/>}
       {step==='welcome' && <ConsoleChrome><Idea2Welcome copyVariant={tweaks.copyVariant} onConnectGithub={()=>setStep('ghauth')} onSkip={()=>{}}/></ConsoleChrome>}
       {step==='ghauth' && <Idea2GithubAuth onAuthorize={()=>setStep('pickrepo')} onCancel={()=>setStep('welcome')}/>}
       {step==='pickrepo' && <ConsoleChrome><Idea2PickRepo onPick={(r)=>{setRepo(r);setStep('analyzing');}} onBack={()=>setStep('welcome')}/></ConsoleChrome>}
@@ -556,17 +507,16 @@ function Idea2App({tweaks, setTweak, showTweaks}){
       {/* Step jumper (always visible, small pill bottom-left) */}
       <div style={{position:'absolute',bottom:16,left:16,display:'flex',alignItems:'center',gap:6,padding:'6px 10px',borderRadius:999,background:'rgba(30,30,28,0.9)',border:'1px solid rgba(255,255,255,0.06)',backdropFilter:'blur(8px)',fontFamily:'var(--font-sans)',zIndex:50}}>
         <span style={{fontSize:10,color:'rgba(255,255,255,0.4)',letterSpacing:'0.05em',textTransform:'uppercase',fontWeight:500,marginRight:4}}>Jump to</span>
-        {[['signin','1'],['welcome','2'],['ghauth','3'],['pickrepo','4'],['analyzing','5'],['dashboard','6']].map(([s,n])=>(
+        {[['welcome','1'],['ghauth','2'],['pickrepo','3'],['analyzing','4'],['dashboard','5']].map(([s,n])=>(
           <button key={s} onClick={()=>{if(s==='analyzing'||s==='dashboard')setRepo(FAKE_REPOS[0]);setStep(s);}} style={{width:22,height:22,borderRadius:'50%',background:step===s?'#D97757':'rgba(255,255,255,0.05)',color:step===s?'#fff':'rgba(255,255,255,0.5)',fontSize:11,fontWeight:500,border:'none',cursor:'pointer',fontFamily:'var(--font-sans)'}}>{n}</button>
         ))}
-        <button onClick={()=>{localStorage.removeItem('idea2_step');setStep('signin');setRepo(null);}} style={{marginLeft:4,padding:'4px 8px',borderRadius:12,background:'transparent',color:'rgba(255,255,255,0.4)',fontSize:10,border:'1px solid rgba(255,255,255,0.08)',cursor:'pointer',fontFamily:'var(--font-sans)'}}>Restart</button>
+        <button onClick={()=>{localStorage.removeItem('idea2_step');setStep('welcome');setRepo(null);}} style={{marginLeft:4,padding:'4px 8px',borderRadius:12,background:'transparent',color:'rgba(255,255,255,0.4)',fontSize:10,border:'1px solid rgba(255,255,255,0.08)',cursor:'pointer',fontFamily:'var(--font-sans)'}}>Restart</button>
       </div>
 
       {showTweaks && (
         <div className="tweaks-panel">
           <h3>Tweaks · Idea 2</h3>
           <div className="divider"/>
-          <div className="toggle-row"><span>GitHub OAuth as auth factor</span><button className={'toggle'+(tweaks.oauthEnabled?' on':'')} onClick={()=>setTweak('oauthEnabled',!tweaks.oauthEnabled)}/></div>
           <div className="toggle-row"><span>Stretch: Claude opens a PR</span><button className={'toggle'+(tweaks.prStretch?' on':'')} onClick={()=>setTweak('prStretch',!tweaks.prStretch)}/></div>
           <div className="divider"/>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',fontWeight:500,textTransform:'uppercase',letterSpacing:'0.05em',padding:'0 8px'}}>CTA Copy</div>
