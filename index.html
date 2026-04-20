@@ -316,7 +316,7 @@ function RootApp(){
   const [tab,setTab]=useState(()=>localStorage.getItem('proto_tab')||'idea1');
   useEffect(()=>{localStorage.setItem('proto_tab',tab);},[tab]);
   // Idea 2 + Idea 3 tweaks state + edit mode wiring
-  const [idea2Tweaks,setIdea2Tweaks]=useState(window.IDEA2_TWEAK_DEFAULTS||{oauthEnabled:true,prStretch:true,copyVariant:'A'});
+  const [idea2Tweaks,setIdea2Tweaks]=useState(window.IDEA2_TWEAK_DEFAULTS||{prStretch:true,copyVariant:'A'});
   const [idea3Tweaks,setIdea3Tweaks]=useState(window.IDEA3_TWEAK_DEFAULTS||{showRecs:true,showCredit:true,creditAmount:20});
   const [showTweaks,setShowTweaks]=useState(false);
   useEffect(()=>{
